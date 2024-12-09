@@ -1,0 +1,1 @@
+ docker run -d -v `pwd`/cmode-proxy.conf:/etc/nginx/conf.d/default.conf --name openresty  -p 8989:80 openresty/openresty:alpine

@@ -1,0 +1,70 @@
+syntax = "proto3";
+package proto;
+
+option go_package="./vengine";
+
+message Item{
+  string ItemId = 1 ;
+  float Score = 2;
+}
+
+message VecEngineRequest{
+  int32 Topk = 1;
+  string Collection = 2;
+  repeated Item Items = 3;
+  int32 NProbe = 4;   //search param
+}
+
+message VecEngineResponse{
+  int32 State = 1;
+  repeated Item Items = 2;
+}
+
+message EmbeddingInfo {
+  string ItemId = 1;
+  repeated float EmbVals = 2;
+}
+
+message UpdateVectorRequest {
+  int32 Dimension = 1;
+  string Collection = 2;
+  repeated EmbeddingInfo EmbInfos = 3; //
+}
+
+message UpdateVectorResponse {
+    int32 State = 1;
+    string ErrorMsg = 2;
+}
+
+message CreateCollectionRequest {
+    string CollectionName = 1;
+    int32 VectorDimension = 2;
+}
+
+message CreateCollectionResponse {
+    int32 State = 1;
+    string ErrorMsg = 2;
+}
+
+message DropCollectionRequest {
+    string CollectionName = 1;
+    string Token = 3;
+}
+
+message DropCollectionResponse {
+    int32 State = 1;
+    string ErrorMsg = 2;
+}
+
+message SearchByVectorRequest{
+  VecEngineRequest VEngineReq = 1;
+  string QueryCollection = 2;
+}
+
+service VecEngineService{
+  rpc DoSearch (VecEngineRequest) returns (VecEngineResponse) {}
+  rpc DoUpdateVector(UpdateVectorRequest) returns (UpdateVectorResponse) {}
+  rpc DoCreateCollection (CreateCollectionRequest) returns (CreateCollectionResponse) {}
+  rpc DoDropCollection (DropCollectionRequest) returns (DropCollectionResponse) {}
+  rpc DoSearchByVector (SearchByVectorRequest) returns (VecEngineResponse) {}
+}

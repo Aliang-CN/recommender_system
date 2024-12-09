@@ -1,0 +1,15 @@
+model_name : LINE
+version : wk1.0
+task : recall
+topN_final : 100
+top_k_user : 10
+top_k_item : 10
+recall_mode : i2i
+train_params:
+  batch_size : 2048
+  epochs : 10
+  verbose : 1
+
+model_params:
+  embedding_size : 64
+  order : first

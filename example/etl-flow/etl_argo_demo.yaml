@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Workflow
+metadata:
+  generateName: etl-flow-demo-1
+  namespace: argo
+spec:
+  entrypoint: dag
+  templates:
+    - name: echo
+      inputs:
+        parameters:
+          - name: message
+      container:
+        image: alpine:3.7
+        command: [echo, "{{inputs.parameters.message}}"]
+    - name: etl
+      inputs:
+        parameters:
+          - name: id
+          - name: entrypoint
+          - name: message
+      container:
+        image: ccr.deepwisdomai.com/recsys/autorec-realtime/autorec-etl-flow:1.0.5
+#        command: ["/app/item_etl.py", "{{inputs.parameters.message}}"]
+        args: ["{{inputs.parameters.entrypoint}}","{{inputs.parameters.id}}","{{inputs.parameters.message}}"]
+    - name: dag
+      dag:
+        tasks:
+          - name: start
+            template: echo
+            arguments:
+              parameters: [{name: message, value: start-etl}]
+          - name: user-etl
+            dependencies: [start]
+            template: etl
+            arguments:
+              parameters: [{name: entrypoint ,value: "/app/user_etl.py"},{name: id ,value: 1},{name: message, value: '{"model": "deepfm", "data_root_path": "../data/", "user_data_path": "../../data/origin_data/user_full_20210624.csv", "item_data_path": "../../data/origin_data/item_full_20210624.csv", "behavior_data_path": "../../data/origin_data/behavior", "save_data_path": "../../data/train_data/deepfm/data.csv", "enc_dict_path": "../../data/train_data/deepfm/enc_data.pkl", "save_model_path": "../../save_model/deepfm/Model.pb", "item_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory", "n_price"]}}, {"op": "normalization", "params": [{"col": "n_price", "min": 10, "max": 10000}]}], "user_operators": [{"op": "rename", "params": {"cols": ["user_profile_for_third_party.yid", "user_profile_for_third_party.gender", "user_profile_for_third_party.age", "user_profile_for_third_party.user_level", "user_profile_for_third_party.maincate"], "new_cols": ["c_user_id", "c_gender", "c_age", "c_level", "c_maincate"]}}, {"op": "normalization", "params": [{"col": "c_age", "min": 18, "max": 60}]}], "behavior_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "c_user_id", "c_behavior_type", "c_session_id"]}}, {"op": "random_negative_sampling", "params": {"ratio": 10, "user_id": "c_user_id", "item_id": "c_item_id", "session_id": "c_session_id"}}], "user_feature": {"num_cols": ["c_age"], "cate_cols": ["c_user_id", "c_gender"], "multicate_cols": {"c_maincate": 3}}, "item_feature": {"num_cols": ["n_price"], "cate_cols": ["c_item_id", "c_level", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory"]}}'}]
+          - name: item-etl
+            dependencies: [start]
+            template: etl
+            arguments:
+                parameters: [{name: entrypoint ,value: "/app/item_etl.py"},{name: id ,value: 1},{name: message, value: '{"model": "deepfm", "data_root_path": "../data/", "user_data_path": "../../data/origin_data/user_full_20210624.csv", "item_data_path": "../../data/origin_data/item_full_20210624.csv", "behavior_data_path": "../../data/origin_data/behavior", "save_data_path": "../../data/train_data/deepfm/data.csv", "enc_dict_path": "../../data/train_data/deepfm/enc_data.pkl", "save_model_path": "../../save_model/deepfm/Model.pb", "item_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory", "n_price"]}}, {"op": "normalization", "params": [{"col": "n_price", "min": 10, "max": 10000}]}], "user_operators": [{"op": "rename", "params": {"cols": ["user_profile_for_third_party.yid", "user_profile_for_third_party.gender", "user_profile_for_third_party.age", "user_profile_for_third_party.user_level", "user_profile_for_third_party.maincate"], "new_cols": ["c_user_id", "c_gender", "c_age", "c_level", "c_maincate"]}}, {"op": "normalization", "params": [{"col": "c_age", "min": 18, "max": 60}]}], "behavior_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "c_user_id", "c_behavior_type", "c_session_id"]}}, {"op": "random_negative_sampling", "params": {"ratio": 10, "user_id": "c_user_id", "item_id": "c_item_id", "session_id": "c_session_id"}}], "user_feature": {"num_cols": ["c_age"], "cate_cols": ["c_user_id", "c_gender"], "multicate_cols": {"c_maincate": 3}}, "item_feature": {"num_cols": ["n_price"], "cate_cols": ["c_item_id", "c_level", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory"]}}'}]
+          - name: behavior-etl
+            dependencies: [start]
+            template: etl
+            arguments:
+              parameters: [{name: entrypoint ,value: "/app/behavior_etl.py"},{ name: id ,value: 1 },{ name: message, value: '{"model": "deepfm", "data_root_path": "../data/", "user_data_path": "../../data/origin_data/user_full_20210624.csv", "item_data_path": "../../data/origin_data/item_full_20210624.csv", "behavior_data_path": "../../data/origin_data/behavior", "save_data_path": "../../data/train_data/deepfm/data.csv", "enc_dict_path": "../../data/train_data/deepfm/enc_data.pkl", "save_model_path": "../../save_model/deepfm/Model.pb", "item_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory", "n_price"]}}, {"op": "normalization", "params": [{"col": "n_price", "min": 10, "max": 10000}]}], "user_operators": [{"op": "rename", "params": {"cols": ["user_profile_for_third_party.yid", "user_profile_for_third_party.gender", "user_profile_for_third_party.age", "user_profile_for_third_party.user_level", "user_profile_for_third_party.maincate"], "new_cols": ["c_user_id", "c_gender", "c_age", "c_level", "c_maincate"]}}, {"op": "normalization", "params": [{"col": "c_age", "min": 18, "max": 60}]}], "behavior_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "c_user_id", "c_behavior_type", "c_session_id"]}}, {"op": "random_negative_sampling", "params": {"ratio": 10, "user_id": "c_user_id", "item_id": "c_item_id", "session_id": "c_session_id"}}], "user_feature": {"num_cols": ["c_age"], "cate_cols": ["c_user_id", "c_gender"], "multicate_cols": {"c_maincate": 3}}, "item_feature": {"num_cols": ["n_price"], "cate_cols": ["c_item_id", "c_level", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory"]}}'}]
+          - name: join-etl
+            dependencies: [user-etl,item-etl,behavior-etl]
+            template: etl
+            arguments:
+              parameters: [{name: entrypoint ,value: "/app/join_etl.py"},{name: id, value: 1},{ name: message, value: '{"model": "deepfm", "data_root_path": "../data/", "user_data_path": "../../data/origin_data/user_full_20210624.csv", "item_data_path": "../../data/origin_data/item_full_20210624.csv", "behavior_data_path": "../../data/origin_data/behavior", "save_data_path": "../../data/train_data/deepfm/data.csv", "enc_dict_path": "../../data/train_data/deepfm/enc_data.pkl", "save_model_path": "../../save_model/deepfm/Model.pb", "item_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory", "n_price"]}}, {"op": "normalization", "params": [{"col": "n_price", "min": 10, "max": 10000}]}], "user_operators": [{"op": "rename", "params": {"cols": ["user_profile_for_third_party.yid", "user_profile_for_third_party.gender", "user_profile_for_third_party.age", "user_profile_for_third_party.user_level", "user_profile_for_third_party.maincate"], "new_cols": ["c_user_id", "c_gender", "c_age", "c_level", "c_maincate"]}}, {"op": "normalization", "params": [{"col": "c_age", "min": 18, "max": 60}]}], "behavior_operators": [{"op": "col_filter", "params": {"cols": ["c_item_id", "c_user_id", "c_behavior_type", "c_session_id"]}}, {"op": "random_negative_sampling", "params": {"ratio": 10, "user_id": "c_user_id", "item_id": "c_item_id", "session_id": "c_session_id"}}], "user_feature": {"num_cols": ["c_age"], "cate_cols": ["c_user_id", "c_gender"], "multicate_cols": {"c_maincate": 3}}, "item_feature": {"num_cols": ["n_price"], "cate_cols": ["c_item_id", "c_level", "n_brand", "n_maincategory", "n_secondcategory", "n_thirdcategory"]}}'}]

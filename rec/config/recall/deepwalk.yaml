@@ -1,0 +1,16 @@
+model_name : DeepWalk
+version : wk1.0
+task : recall
+topN_final : 100
+top_k_user : 10
+top_k_item : 10
+recall_mode : u2u2i
+train_params:
+  window_size : 5
+  iter : 3
+  embed_size : 128
+
+model_params:
+  walk_length : 5
+  num_walks : 50
+  workers : 1

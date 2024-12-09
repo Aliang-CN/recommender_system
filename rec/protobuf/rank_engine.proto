@@ -1,0 +1,41 @@
+syntax = "proto3";        //说明使用proto3语法定义协议
+
+package rankengine;
+option go_package="./rankengine";
+
+service RankEngine{
+  rpc RankRequest (RequestInfo) returns (Response) {}
+  rpc UpdateModel (UpdateRequestInfo) returns (Response) {}
+}
+
+message RequestBaseInfo{
+  string customer_id                = 1;                      //客户
+  string project_id                 = 2;                      //场景
+  string scene_id                   = 3;
+}
+
+message RequestSample{
+  string FeatureList = 1;
+}
+
+message ScoreList{
+  float value  = 1;
+}
+
+message RequestInfo{
+  string RequestAlgorithm = 1;                      //请求
+  repeated RequestSample RequestSample  = 2;        //请求样本信息
+}
+
+message Response{
+  int32 ResponseInfo = 1;                            //返回信息,0是正确
+  repeated ScoreList ScoreList = 2;                  //返回信息
+}
+
+message UpdateRequestInfo{
+  RequestBaseInfo request_base_info = 1 ;
+}
+
+message UpdateResponse{
+  int32 ResponseInfo = 1;
+}

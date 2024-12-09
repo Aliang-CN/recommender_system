@@ -1,0 +1,20 @@
+model_name : DeepFEFM
+version : wk1.0
+batch_size : 256
+n_epoch : 10
+lr : 0.001
+emb_size : 8
+task : ctr
+
+params:
+  use_fefm : True
+  dnn_hidden_units : [128,128]
+  l2_reg_linear : 0.00001
+  l2_reg_embedding_feat : 0.00001
+  l2_reg_embedding_field : 0.00001
+  l2_reg_dnn : 0
+  exclude_feature_embed_in_dnn : False
+  use_linear : True
+  use_fefm_embed_in_dnn : True
+  dnn_activation : 'relu'
+  dnn_use_bn : False

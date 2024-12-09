@@ -1,0 +1,7 @@
+model_name : kmeans
+
+params:
+  n_clusters : 3
+  random_state : 8
+  batch_size : 2
+  max_iter : True

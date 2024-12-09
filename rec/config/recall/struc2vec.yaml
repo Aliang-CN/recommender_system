@@ -1,0 +1,13 @@
+model_name : Struc2Vec
+version : wk1.0
+task : recall
+topN_final : 100
+top_k_user : 10
+top_k_item : 10
+train_params:
+
+model_params:
+  walk_length : 5
+  num_walks : 50
+  workers : 4
+  verbose : 1

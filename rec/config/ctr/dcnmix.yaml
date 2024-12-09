@@ -1,0 +1,19 @@
+model_name : DCNMix
+version : wk1.0
+batch_size : 256
+n_epoch : 10
+lr : 0.001
+emb_size : 8
+task : ctr
+
+params:
+  cross_num : 2
+  dnn_hidden_units : [128,128]
+  l2_reg_linear : 0.00001
+  l2_reg_embedding : 0.00001
+  l2_reg_cross : 0.00001
+  low_rank : 32
+  l2_reg_dnn : 0
+  num_experts : 4
+  dnn_activation : 'relu'
+  dnn_use_bn : False

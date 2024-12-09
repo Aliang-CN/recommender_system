@@ -1,0 +1,19 @@
+model_name : GBM
+version : wk1.0
+task : ctr
+
+params:
+  metric : 'auc'
+  verbosity : -1
+  seed : 0
+  two_round : False
+  num_leaves : 63
+  bagging_fraction : 0.9
+  bagging_freq : 3
+  feature_fraction : 0.9
+  min_sum_hessian_in_leaf : 0.1
+  lambda_l1 : 0.01
+  lambda_l2 : 0.01
+  min_data_in_leaf : 50
+  objective : "binary"
+  learning_rate : 0.1

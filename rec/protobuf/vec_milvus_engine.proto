@@ -1,0 +1,21 @@
+syntax = "proto3";        //说明使用proto3语法定义协议
+
+package vec_milvus_engine;
+service VecMilvusEngine{
+  rpc VecSearch (VecRequestInfo) returns (Response) {}
+}
+
+message ItemList{
+  string item_id = 1 ;      //请求id
+}
+
+message VecRequestInfo{
+  int32 recall_topk = 1;                 //请求每个向量返回的结果
+  string request_algorithm = 2 ;        //请求算法
+  repeated ItemList request_item_list = 3 ;     //请求item列表
+}
+
+message Response{
+  int32 response_info = 1;      //返回信息,0是正确
+  repeated ItemList response_item_list = 2;    //返回信息
+}

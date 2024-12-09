@@ -1,0 +1,19 @@
+model_name : Node2Vec
+version : wk1.0
+task : recall
+topN_final : 100
+top_k_user : 10
+top_k_item : 10
+recall_mode : i2i
+train_params:
+  window_size : 5
+  iter : 3
+  embed_size : 128
+
+model_params:
+  walk_length : 5
+  num_walks : 40
+  workers : 4
+  p : 0.25
+  q : 4
+  use_rejection_sampling : 1

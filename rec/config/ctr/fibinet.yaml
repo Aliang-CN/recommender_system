@@ -1,0 +1,17 @@
+model_name : FiBiNET
+version : wk1.0
+batch_size : 256
+n_epoch : 10
+lr : 0.001
+emb_size : 8
+task : ctr
+
+params:
+  bilinear_type : 'interaction'
+  reduction_ratio : 3
+  dnn_hidden_units : [128,128]
+  l2_reg_linear : 0.00001
+  l2_reg_embedding : 0.00001
+  l2_reg_dnn : 0
+  dnn_dropout : 0
+  dnn_activation : 'relu'

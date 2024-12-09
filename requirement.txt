@@ -1,0 +1,6 @@
+pandas
+rocketmq-client-python
+scikit-learn
+elasticsearch
+pynacos
+dask

@@ -1,0 +1,16 @@
+application:
+
+  name: AutoRec-Realtime
+
+dev:
+
+  server_addresses: 172.16.16.41:8848
+
+  namespace: k11
+
+  config_name: connection
+
+qa:
+  server_addresses: 172.16.16.41:8848
+  namespace: k11
+  config_name: connection

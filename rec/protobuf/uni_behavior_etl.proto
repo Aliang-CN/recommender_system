@@ -1,0 +1,32 @@
+syntax = "proto3";        //说明使用proto3语法定义协议
+
+package etl_engine;
+service ETLEngine{
+    rpc BehaviorETLRequest (BehaviorETLRequestInfo) returns (Response) {}
+}
+
+message RequestBaseInfo{
+    string customer_id             = 1;                      //客户
+    string project_id              = 2;                      //场景
+    string scene_id                = 3;
+}
+
+message ItemETLRequestInfo{
+    RequestBaseInfo request_base_info = 1 ;
+}
+
+message UserETLRequestInfo{
+    RequestBaseInfo request_base_info = 1 ;
+}
+
+message BehaviorETLRequestInfo{
+    RequestBaseInfo request_base_info = 1 ;
+}
+
+message JoinRequestInfo{
+    RequestBaseInfo request_base_info = 1 ;
+}
+
+message Response{
+    int32 response_info = 1;                    //返回信息,0是正确
+}

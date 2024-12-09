@@ -1,0 +1,35 @@
+syntax = "proto3";        //说明使用proto3语法定义协议
+
+package offline_engine;
+service OfflineEngine{
+  rpc RankSampleMakerRequest (RankSampleMakerRequestInfo) returns(Response) {}
+  rpc RankTrainerRequest (RankTrainerRequestInfo) returns (Response) {}
+  rpc RecallSampleMakerRequest (RecallSampleMakerRequestInfo) returns (Response) {}
+  rpc RecallTrainerRequest (RecallTrainerRequestInfo) returns (Response) {}
+}
+
+message RequestBaseInfo{
+  string customer_id             = 1;                      //客户
+  string project_id              = 2;                      //场景
+  string scene_id                = 3;
+}
+
+message RankSampleMakerRequestInfo{
+  RequestBaseInfo request_base_info = 1 ;
+}
+
+message RankTrainerRequestInfo{
+  RequestBaseInfo request_base_info = 1 ;
+}
+
+message RecallSampleMakerRequestInfo{
+  RequestBaseInfo request_base_info = 1;
+}
+
+message RecallTrainerRequestInfo{
+  RequestBaseInfo request_base_info = 1;
+}
+
+message Response{
+  int32 response_info = 1;                    //返回信息,0是正确
+}
